@@ -41,13 +41,22 @@ app.get('/:codes', (req, res, next) => {
 
   var options = {
     method: 'GET',
+    json: true,
     uri: 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(' + codes + ')&offset=10&size=5&apikey=' + apiKey
   }
 
   rp(options)
   .then(data => {
-    
-    res.send(data);
+    var allWines = data.Products.List;
+    var chosenWines = [];
+
+    for (var i = 0; i < 3; i++) {
+      var idx = Math.random() * allWines.length;
+
+      chosenWines.push(allWines.splice(idx, 1))
+    }
+
+    res.send(chosenWines);
   })
 })
 
