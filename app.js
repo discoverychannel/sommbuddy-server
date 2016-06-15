@@ -31,29 +31,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/:codes', (req, res, next) => {
-  var codes = req.params.codes.slice(6);
-  var price = req.params.codes.slice(0, 6);
-  var priceRange = '';
-
-  switch (price) {
-    case 'price1':
-      priceRange = '0|20';
-      break;
-    case 'price2':
-      priceRange = '20|40';
-      break;
-    case 'price3':
-      priceRange = '40|60';
-      break;
-    default:
-      priceRange = '0|100';
-      break;
-  }
+  var codes = req.params.codes;
+  // var price = req.params.codes.slice(0, 6);
+  // var priceRange = '';
+  //
+  // switch (price) {
+  //   case 'price1':
+  //     priceRange = '0|20';
+  //     break;
+  //   case 'price2':
+  //     priceRange = '20|40';
+  //     break;
+  //   case 'price3':
+  //     priceRange = '40|60';
+  //     break;
+  //   default:
+  //     priceRange = '0|100';
+  //     break;
+  // }
 
   var options = {
     method: 'GET',
     json: true,
-    uri: 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(' + codes + ')+price(' + priceRange + ')&apikey=' + apiKey
+    uri: 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(' + codes + ')&apikey=' + apiKey
   }
 
   rp(options)
@@ -71,15 +71,15 @@ app.get('/:codes', (req, res, next) => {
   });
 });
 
-app.post('/', (req, res, next) => {
-  var userId = req.body.userId;
-  var name = req.body.name;
-  var price = req.body.price;
-  var imageUrl = req.body.imageUrl;
-
-  if ()
-
-});
+// app.post('/', (req, res, next) => {
+//   var userId = req.body.userId;
+//   var name = req.body.name;
+//   var price = req.body.price;
+//   var imageUrl = req.body.imageUrl;
+//
+//   if ()
+//
+// });
 
 // app.use('/', routes);
 // app.use('/users', users);
