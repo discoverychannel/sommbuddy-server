@@ -71,28 +71,18 @@ app.get('/:codes', (req, res, next) => {
   });
 });
 
-// app.post('/', (req, res, next) => {
-//   var userId = req.body.userId;
-//   var name = req.body.name;
-//   var price = req.body.price;
-//   var imageUrl = req.body.imageUrl;
-//
-//   if ()
-//
-// });
+app.post('/', (req, res, next) => {
+  var name = req.body.name;
+  var price = req.body.price;
+  var imageUrl = req.body.imageUrl;
+
+  knex('wines').insert({name: name, price: price, imageUrl: imageUrl}).then(data => {
+    res.status(200);
+  });
+});
 
 // app.use('/', routes);
 // app.use('/users', users);
-
-// app.get('/', (req, res, next) => {
-//   var testObj = {
-//     name: 'Spencer',
-//     occupation: 'developer',
-//     hobbies: ['writing', 'working out', 'reading']
-//   }
-//   res.send(testObj)
-// })
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
