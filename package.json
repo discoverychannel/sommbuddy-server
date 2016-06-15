@@ -12,8 +12,24 @@
     "dotenv": "^2.0.0",
     "express": "~4.13.1",
     "jade": "~1.11.0",
+    "knex": "^0.11.5",
     "morgan": "~1.6.1",
+    "pg": "^5.1.0",
     "request-promise": "^3.0.0",
     "serve-favicon": "~2.3.0"
-  }
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/discoverychannel/sommbuddy-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/discoverychannel/sommbuddy-server/issues"
+  },
+  "homepage": "https://github.com/discoverychannel/sommbuddy-server#readme",
+  "description": ""
 }

@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var knex = require('./db/knex');
 var rp = require('request-promise');
 require('dotenv').load();
 
@@ -31,18 +31,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/:codes', (req, res, next) => {
-  // var type = req.body.type; //red, white, bubbles, etc.
-  // var wineFlavor = req.body.wineFlavor; //sweet, dry, exotic, etc.
-  // var profile = req.body.profile; //herbacious, piney, oakey, etc.
-  // var mealWeight = req.body.mealWeight; //light, heavy; entree, appetizers, dessert, etc.
-  // var foodFlavor = req.body.foodFlavor; //savory, sweet, etc.
-  // var price = req.body.price; //$, $$, $$$, etc.
-  var codes = req.params.codes;
+  var codes = req.params.codes.slice(6);
+  var price = req.params.codes.slice(0, 6);
+  var priceRange = '';
+
+  switch (price) {
+    case 'price1':
+      priceRange = '0|20';
+      break;
+    case 'price2':
+      priceRange = '20|40';
+      break;
+    case 'price3':
+      priceRange = '40|60';
+      break;
+    default:
+      priceRange = '0|100';
+      break;
+  }
 
   var options = {
     method: 'GET',
     json: true,
-    uri: 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(' + codes + ')&offset=10&size=5&apikey=' + apiKey
+    uri: 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(' + codes + ')+price(' + priceRange + ')&apikey=' + apiKey
   }
 
   rp(options)
@@ -50,15 +61,25 @@ app.get('/:codes', (req, res, next) => {
     var allWines = data.Products.List;
     var chosenWines = [];
 
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 5; i++) {
       var idx = Math.random() * allWines.length;
 
       chosenWines.push(allWines.splice(idx, 1))
     }
 
     res.send(chosenWines);
-  })
-})
+  });
+});
+
+app.post('/', (req, res, next) => {
+  var userId = req.body.userId;
+  var name = req.body.name;
+  var price = req.body.price;
+  var imageUrl = req.body.imageUrl;
+
+  if ()
+
+});
 
 // app.use('/', routes);
 // app.use('/users', users);
