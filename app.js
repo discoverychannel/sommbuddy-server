@@ -8,6 +8,25 @@ var knex = require('./db/knex');
 var rp = require('request-promise');
 require('dotenv').load();
 
+function saveWine(wineObject) {
+  knex('wines').insert({
+    name: wineObject.name,
+    grape: wineObject.grape,
+    vineyard: wineObject.vineyard,
+    vintage: wineObject.vintage,
+    region: wineObject.region,
+    price: wineObject.price,
+    picture: wineObject.picture
+  }).then(data => {
+    knex('users_wines').insert({
+      user_id: wineObject.user_id,
+      wine_id:
+    }).then(data2 => {
+      res.status(200);
+    });
+  });
+}
+
 // var wineUrl = 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(490+124)&offset=10&size=5&apikey=af9f483043f31e08bf6d87a187dd12b0';
 
 // 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(490+124)&offset=10&size=5&apikey='
@@ -61,7 +80,7 @@ app.get('/:codes', (req, res, next) => {
     var allWines = data.Products.List;
     var chosenWines = [];
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 3; i++) {
       var idx = Math.random() * allWines.length;
 
       chosenWines.push(allWines.splice(idx, 1))
@@ -72,13 +91,9 @@ app.get('/:codes', (req, res, next) => {
 });
 
 app.post('/', (req, res, next) => {
-  var name = req.body.name;
-  var price = req.body.price;
-  var picture = req.body.picture;
+  var wine = req.body;
 
-  knex('wines').insert({name: name, price: price, imageUrl: imageUrl}).then(data => {
-    res.status(200);
-  });
+  saveWine(wine);
 });
 
 // app.use('/', routes);
