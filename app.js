@@ -74,7 +74,7 @@ app.get('/:codes', (req, res, next) => {
 app.post('/', (req, res, next) => {
   var name = req.body.name;
   var price = req.body.price;
-  var imageUrl = req.body.imageUrl;
+  var picture = req.body.picture;
 
   knex('wines').insert({name: name, price: price, imageUrl: imageUrl}).then(data => {
     res.status(200);

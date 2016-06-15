@@ -6,8 +6,12 @@ users
 wines
   id
   name
+  grape
+  vineyard
+  vintage
+  region
   price
-  imageUrl
+  picture
 
 users_wines
   id
