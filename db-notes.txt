@@ -22,6 +22,5 @@ users_wines
 
 
 to-do:
-  add priceRetail filter after API result but before random 5 selection
   add necessary database routes
   see if you can grab the image url

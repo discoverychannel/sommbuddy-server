@@ -43,6 +43,11 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+app.get('/favicon.ico', (req, res, next) => {
+  res.status(200);
+});
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -97,6 +102,27 @@ app.get('/:codes', (req, res, next) => {
 
       chosenWines.push(pricedWines.splice(idx, 1))
     }
+
+    chosenWines.forEach(function(wine) {
+      var options2 = {
+        method: 'GET',
+        uri: wine[0].Url,
+        json: true
+      }
+
+      // console.log(options2.uri)
+
+      rp(options2).then(data => {
+        var start = data.indexOf('<img alt="wine bottle" class="hero" itemprop="image" src=') + 57;
+        var newData = data.slice(start, start + 300);
+        // var newStart = newData.
+        var end = newData.indexOf('.jpg') + 5;
+        var picture = newData.slice(0, end);
+
+        // wine.picture = picture;
+        console.log(picture);
+      });
+    });
 
     res.send(chosenWines);
   });
