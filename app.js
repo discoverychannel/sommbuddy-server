@@ -52,38 +52,50 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/:codes', (req, res, next) => {
   var codes = req.params.codes;
   var price = req.params.codes.slice(0, 6);
-  var priceRange = '';
+  var priceMin;
+  var priceMax;
 
   switch (price) {
     case 'price1':
-      priceRange = '0|25';
+      priceMin = 0;
+      priceMax = 25;
       break;
     case 'price2':
-      priceRange = '25|50';
+      priceMin = 25;
+      priceMax = 50;
       break;
     case 'price3':
-      priceRange = '50|100';
+      priceMin = 50;
+      priceMax = 100;
       break;
     default:
-      priceRange = '0|100';
+      priceMin = 0;
+      priceMax = 100;
       break;
   }
 
   var options = {
     method: 'GET',
     json: true,
-    uri: 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(' + codes + ')+price(' + priceRange + ')&apikey=' + apiKey
+    uri: 'http://services.wine.com/api/beta2/service.svc/JSON//catalog?filter=categories(' + codes + ')+price(' + priceMin + '|' + priceMax + ')&apikey=' + apiKey
   }
 
   rp(options)
   .then(data => {
     var allWines = data.Products.List;
+    var pricedWines = [];
     var chosenWines = [];
 
-    for (var i = 0; i < 3; i++) {
-      var idx = Math.random() * allWines.length;
+    allWines.forEach(function(wine) {
+      if (wine.PriceRetail >= priceMin && wine.PriceRetail <= priceMax) {
+        pricedWines.push(wine);
+      }
+    })
 
-      chosenWines.push(allWines.splice(idx, 1))
+    for (var i = 0; i < 3; i++) {
+      var idx = Math.random() * pricedWines.length;
+
+      chosenWines.push(pricedWines.splice(idx, 1))
     }
 
     res.send(chosenWines);
