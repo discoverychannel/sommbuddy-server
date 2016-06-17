@@ -93,6 +93,7 @@ app.get('/:codes', (req, res, next) => {
     var allWines = data.Products.List;
     var pricedWines = [];
     var chosenWines = [];
+    var finalWines = []; /////////////////////////////////// add finalWines
 
     allWines.forEach(function(wine) {
       if (wine.PriceRetail >= priceMin && wine.PriceRetail <= priceMax) {
@@ -100,7 +101,7 @@ app.get('/:codes', (req, res, next) => {
       }
     })
 
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 8; i++) {/////////////////////////// change to 'i < 8'
       var idx = Math.random() * pricedWines.length;
 
       chosenWines.push(pricedWines.splice(idx, 1))
@@ -126,14 +127,19 @@ app.get('/:codes', (req, res, next) => {
         // console.log(wine[0]);
       });
     })).then(function() {
-      res.send(chosenWines);
-    })
-    // console.log(chosenWines);
+      for (var j = 0; finalWines.length < 3; j++) {
+        if (j == chosenWines.length - 1) break;
+        if (chosenWines[j][0].Picture.length > 10) {
+          finalWines.push(chosenWines[j])
+        }
+      }
+      res.send(finalWines);
+    });
   });
 });
 
-app.post('/', (req, res, next) => {
-  console.log(req.body);
+app.post('/:user', (req, res, next) => {
+  console.log(req.params.user);
   return knex('wines').insert({
     name: req.body.name,
     grape: req.body.grape,

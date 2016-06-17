@@ -24,3 +24,17 @@ users_wines
 to-do:
   add necessary database routes
   see if you can grab the image url
+
+
+  });
+})).then(function() {
+  for (var j = 0; finalWines.length < 4; j++) {
+    if (chosenWines[j].Picture.length > 10) {
+      finalWines.push(chosenWines[j])
+    }
+  }
+}).then(function() {
+  res.send(finalWines);
+// console.log(chosenWines);
+});
+});
