@@ -17,13 +17,14 @@ require('dotenv').load();
 //     region: wineObject.region,
 //     price: wineObject.price,
 //     picture: wineObject.picture
-//   }).then(data => {
-//     knex('users_wines').insert({
-//       user_id: wineObject.user_id,
-//       wine_id:
-//     }).then(data2 => {
-//       res.status(200);
-//     });
+//   })
+//   .then(data => {
+//     // knex('users_wines').insert({
+//     //   user_id: wineObject.user_id,
+//     //   wine_id:
+//     // }).then(data2 => {
+//       return;
+//     // });
 //   });
 // }
 
@@ -103,7 +104,7 @@ app.get('/:codes', (req, res, next) => {
       chosenWines.push(pricedWines.splice(idx, 1))
     }
 
-    chosenWines.forEach(function(wine) {
+    Promise.all(chosenWines.map(function(wine) {
       var options2 = {
         method: 'GET',
         uri: wine[0].Url,
@@ -112,27 +113,39 @@ app.get('/:codes', (req, res, next) => {
 
       // console.log(options2.uri)
 
-      rp(options2).then(data => {
+      return rp(options2).then(data => {
         var start = data.indexOf('<img alt="wine bottle" class="hero" itemprop="image" src=') + 57;
         var newData = data.slice(start, start + 300);
-        // var newStart = newData.
         var end = newData.indexOf('.jpg') + 5;
         var picture = newData.slice(0, end);
 
-        // wine.picture = picture;
-        console.log(picture);
-      });
-    });
+        wine[0].Picture = picture.slice(1,-1);
 
-    res.send(chosenWines);
+        console.log(wine[0]);
+      });
+    })).then(function() {
+      res.send(chosenWines);
+    })
+    // console.log(chosenWines);
   });
 });
 
 app.post('/', (req, res, next) => {
-  var wine = req.body;
-
-  saveWine(wine);
+  console.log(req.body);
+  knex('wines').insert({
+    name: req.body.name,
+    grape: req.body.grape,
+    vineyard: req.body.vineyard,
+    vintage: req.body.vintage,
+    region: req.body.region,
+    price: req.body.price,
+    picture: req.body.picture
+  }).then(data => {
+    console.log('yes');
+  });
 });
+
+
 
 // app.use('/', routes);
 // app.use('/users', users);
