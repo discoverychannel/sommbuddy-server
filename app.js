@@ -148,6 +148,13 @@ app.post('/', (req, res, next) => {
   });
 });
 
+app.put('/', (req, res, next) => {
+  console.log(req.body.name);
+  return knex('wines').where({name: req.body.name}).del()
+    .then(data => {
+      res.json(data);
+  });
+});
 
 
 // app.use('/', routes);
