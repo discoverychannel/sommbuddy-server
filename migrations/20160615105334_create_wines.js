@@ -9,6 +9,7 @@ exports.up = function(knex, Promise) {
     table.string('region');
     table.float('price');
     table.string('picture');
+    table.string('storeurl');
   })
 };
 
