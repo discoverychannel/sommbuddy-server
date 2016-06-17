@@ -57,6 +57,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
+app.get('/list', (req, res, next) => {
+  return knex('wines').select('name', 'vintage', 'price', 'picture')
+    .then(data => {
+      res.json(data);
+    })
+  })
+
 app.get('/:codes', (req, res, next) => {
   var codes = req.params.codes;
   var price = req.params.codes.slice(0, 6);
@@ -133,7 +140,6 @@ app.get('/:codes', (req, res, next) => {
 });
 
 app.post('/', (req, res, next) => {
-  console.log(req.body);
   return knex('wines').insert({
     name: req.body.name,
     grape: req.body.grape,
@@ -143,14 +149,18 @@ app.post('/', (req, res, next) => {
     price: req.body.price,
     picture: req.body.picture,
     storeurl: req.body.storeUrl
-  }).then(data => {
-    console.log('yes');
-    console.log(data);
-    return data;
+  }).returning('id')
+    .then(data => {
+    res.json(data);
   });
 });
 
-
+app.put('/', (req, res, next) => {
+  return knex('wines').where({name: req.body.name}).del()
+    .then(data => {
+      res.json(data);
+  });
+});
 
 // app.use('/', routes);
 // app.use('/users', users);
