@@ -123,7 +123,7 @@ app.get('/:codes', (req, res, next) => {
 
         wine[0].Picture = picture.slice(1,-1);
 
-        console.log(wine[0]);
+        // console.log(wine[0]);
       });
     })).then(function() {
       res.send(chosenWines);
@@ -134,16 +134,19 @@ app.get('/:codes', (req, res, next) => {
 
 app.post('/', (req, res, next) => {
   console.log(req.body);
-  knex('wines').insert({
+  return knex('wines').insert({
     name: req.body.name,
     grape: req.body.grape,
     vineyard: req.body.vineyard,
     vintage: req.body.vintage,
     region: req.body.region,
     price: req.body.price,
-    picture: req.body.picture
+    picture: req.body.picture,
+    storeurl: req.body.storeUrl
   }).then(data => {
     console.log('yes');
+    console.log(data);
+    return data;
   });
 });
 
