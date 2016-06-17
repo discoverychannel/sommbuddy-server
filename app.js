@@ -133,7 +133,6 @@ app.get('/:codes', (req, res, next) => {
 });
 
 app.post('/', (req, res, next) => {
-  console.log(req.body);
   return knex('wines').insert({
     name: req.body.name,
     grape: req.body.grape,
@@ -143,10 +142,9 @@ app.post('/', (req, res, next) => {
     price: req.body.price,
     picture: req.body.picture,
     storeurl: req.body.storeUrl
-  }).then(data => {
-    console.log('yes');
-    console.log(data);
-    return data;
+  }).returning('id')
+    .then(data => {
+    res.json(data);
   });
 });
 
