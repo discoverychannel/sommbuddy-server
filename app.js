@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var knex = require('./db/knex');
 var rp = require('request-promise');
+var cors = require('cors');
 require('dotenv').load();
 
 // function saveWine(wineObject) {
@@ -54,6 +55,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.get('/:codes', (req, res, next) => {
   var codes = req.params.codes;
