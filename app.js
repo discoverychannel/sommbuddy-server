@@ -65,18 +65,13 @@ app.get('/list', (req, res, next) => {
   })
 
 app.post('/:user', (req, res, next) => {
-  console.log(req.body);
   return knex('users').first().where({username: req.params.user}).then(function(data){
-    console.log('this is inside the knex data');
     if(req.body.pw === data.password){
-      console.log('user exists, there is a matched password!');
-      res.json('match! show them their list.');
+      res.json('match!');
     } else {
-      console.log('user found, no password!');
-      res.json('user found, wrong password');
+      res.json('wrong password');
     }}).catch(function(err){
-      console.log('knex threw an error!');
-      res.json('user is not in db, redirect to register');
+      res.json('user not found');
     })
   })
 
